@@ -78,8 +78,8 @@ footer{padding:16px 24px;margin-top:8px;border-top:3px solid var(--red);backgrou
 <footer>Creado para educación, por la profesora: Marquez Camila Araceli &nbsp;—&nbsp; Instagram: <a href="https://www.instagram.com/didactica_aumentada3.0/" target="_blank" rel="noopener">@didactica_aumentada3.0</a></footer>
 <script>
 const $=id=>document.getElementById(id),S=1000;let BX=165,BY=165,BZ=180;
-const G=[['Capas y líneas',[['lh','Altura de capa','mm',.28,.04],['flh','Altura 1ª capa','mm',.32,.04],['w','Ancho de línea','mm',.55,.05],['walls','Paredes','',2,1],['top','Capas superiores','',4,1],['bot','Capas inferiores','',4,1],['dens','Relleno','%',15,5]]],
-['Velocidad',[['vo','Pared exterior','mm/s',35,1],['vw','Pared interior','mm/s',40,1],['vi','Relleno','mm/s',45,1],['vs','Piel sólida','mm/s',40,1],['v1','Primera capa','mm/s',20,1],['vt','Desplazamiento','mm/s',120,5],['acel','Aceleración (solo estimación)','mm/s²',500,100]]],
+const G=[['Capas y líneas',[['lh','Altura de capa','mm',.28,.04],['flh','Altura 1ª capa','mm',.28,.04],['w','Ancho de línea','mm',.55,.05],['walls','Paredes','',2,1],['top','Capas superiores','',4,1],['bot','Capas inferiores','',4,1],['dens','Relleno','%',15,5]]],
+['Velocidad',[['vo','Pared exterior','mm/s',35,1],['vw','Pared interior','mm/s',40,1],['vi','Relleno','mm/s',45,1],['vs','Piel sólida','mm/s',40,1],['v1','Primera capa','mm/s',20,1],['vt','Desplazamiento','mm/s',60,5],['acel','Aceleración (solo estimación)','mm/s²',500,100]]],
 ['Línea de purga',[['pe','Purga previa en el lugar','mm',10,1],['pl','Largo de la línea','mm',100,10],['pn','Cantidad de líneas','',2,1]]],
 ['Temperatura y flujo',[['tn','Boquilla','°C',205,5],['tr','Reposo (precalentado)','°C',205,5],['tb','Cama','°C',60,5],['flow','Flujo','%',100,1],['fan','Ventilador (desde capa 3)','%',100,5]]],
 ['Retracción (Bowden)',[['rd','Distancia','mm',5,.5],['rs','Velocidad','mm/s',40,5],['rmin','Mínimo desplaz.','mm',1.5,.5]]],
@@ -377,7 +377,7 @@ $('vm').onclick=()=>setView('m');$('vl3').onclick=()=>setView('l3');$('vl2').onc
 $('ptop').onclick=()=>preset('top');$('pfr').onclick=()=>preset('front');$('ple').onclick=()=>preset('left');$('pri').onclick=()=>preset('right');$('piso').onclick=()=>preset('iso');$('pfit').onclick=()=>{fit('tight');render()};$('pbed').onclick=()=>{fit('bed');render()};cv.ondblclick=()=>{fit();render()};
 
 /* ---------- perfiles ---------- */
-const KEY='e2p_profiles',LAST='e2p_last',DEF={};G.forEach(g=>g[1].forEach(f=>DEF[f[0]]=f[3]));
+const KEY='e2p_profiles',LAST='e2p_last2',DEF={};G.forEach(g=>g[1].forEach(f=>DEF[f[0]]=f[3]));
 const getV=()=>{const o={};Object.keys(DEF).forEach(k=>o[k]=+$('c_'+k).value);return o},setV=o=>Object.keys(DEF).forEach(k=>{if(o&&o[k]!=null)$('c_'+k).value=o[k]});
 const store=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}};
 const put=o=>{try{localStorage.setItem(KEY,JSON.stringify(o));return true}catch(e){msg('Este navegador no permite guardar perfiles; usá Exportar.',1);return false}};

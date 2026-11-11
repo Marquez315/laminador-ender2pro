@@ -1,4 +1,4 @@
-const CACHE='laminador-v1';
+const CACHE='laminador-v2';
 const LOCAL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-maskable-512.png','./clipper.js'];
 const EXT=['cdnjs.cloudflare.com','cdn.jsdelivr.net','unpkg.com','fonts.googleapis.com','fonts.gstatic.com'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.all(LOCAL.map(u=>c.add(u).catch(()=>{})))).then(()=>self.skipWaiting()))});
