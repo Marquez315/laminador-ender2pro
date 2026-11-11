@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#D8352A"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
 <title>Laminador Ender-2 Pro · boquilla 0,5 · PLA lento</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <script>
-window.clipperReady=(async()=>{const u=["https://cdnjs.cloudflare.com/ajax/libs/clipper-lib/6.4.2/clipper.min.js","https://cdn.jsdelivr.net/npm/clipper-lib@6.4.2/clipper.js","https://unpkg.com/clipper-lib@6.4.2/clipper.js","https://cdn.jsdelivr.net/gh/junmer/clipper-lib@master/clipper.js"];
+window.clipperReady=(async()=>{const u=["clipper.js","https://cdnjs.cloudflare.com/ajax/libs/clipper-lib/6.4.2/clipper.min.js","https://cdn.jsdelivr.net/npm/clipper-lib@6.4.2/clipper.js","https://unpkg.com/clipper-lib@6.4.2/clipper.js","https://cdn.jsdelivr.net/gh/junmer/clipper-lib@master/clipper.js"];
 for(const s of u){if(window.ClipperLib)break;try{await new Promise((ok,no)=>{const e=document.createElement('script');e.src=s;e.onload=ok;e.onerror=no;document.head.appendChild(e)})}catch(e){}}
 return !!window.ClipperLib})();
 </script>
@@ -44,7 +45,7 @@ canvas{touch-action:none;cursor:grab}.vb select{padding:5px;border:1px solid var
 .mw{color:var(--red);font-size:12px;margin-top:5px;font-weight:500}
 footer{padding:16px 24px;margin-top:8px;border-top:3px solid var(--red);background:var(--pn);text-align:center;font-size:13px;color:var(--mut)}footer a{color:var(--red);font-weight:600}
 </style></head><body>
-<header><h1>Laminador STL → G-code</h1><p>Creality Ender-2 Pro · boquilla 0,5 mm · PLA · velocidad lenta 35–45 mm/s</p></header>
+<header><button id="ins" hidden style="float:right;font:inherit;padding:7px 12px;border-radius:8px;border:1px solid var(--ln);background:var(--pn);color:var(--ink);cursor:pointer" title="Instalar para usar sin conexión">Instalar app</button><h1>Laminador STL → G-code</h1><p>Creality Ender-2 Pro · boquilla 0,5 mm · PLA · velocidad lenta 35–45 mm/s</p></header>
 <main>
 <section class="pn">
 <div class="pn" style="margin-bottom:14px"><b>Perfiles de impresora</b>
@@ -92,7 +93,7 @@ const tick=()=>new Promise(r=>setTimeout(r));
 const prog=v=>$('bar').firstChild.style.width=(v*100)+'%';
 clipperReady.then(ok=>{if(!ok)$('manual').hidden=false});
 $('clp').onchange=async e=>{const t=await e.target.files[0].text(),sc=document.createElement('script');sc.textContent=t;document.head.appendChild(sc);
- if(window.ClipperLib){$('manual').hidden=true;msg('Librería cargada. Ya podés laminar.')}else msg('Ese archivo no es clipper.js.',1)};
+ if(window.ClipperLib){$('manual').hidden=true;try{caches.open('laminador-user').then(c=>c.put('clipper.js',new Response(t,{headers:{'Content-Type':'text/javascript'}})))}catch(_){}msg('Librería cargada y guardada para usar sin conexión.')}else msg('Ese archivo no es clipper.js.',1)};
 
 /* ---------- piezas (varios STL) ---------- */
 function parseSTL(buf){const dv=new DataView(buf),n=dv.getUint32(80,true);
@@ -392,4 +393,14 @@ try{setV(JSON.parse(localStorage.getItem(LAST)||'null'))}catch(e){}
 fillProf('');setView('m');renderList();
 $('go').onclick=run;
 $('dl').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([gcode],{type:'text/plain'}));a.download=name+'.gcode';document.body.appendChild(a);a.click();a.remove()};
+
+/* --- Instalación (PWA) y modo offline --- */
+(()=>{let dp=null;const b=document.getElementById('ins');
+const inst=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;if(!inst)b.hidden=false});
+addEventListener('appinstalled',()=>{dp=null;b.hidden=true});
+if(!inst&&/iphone|ipad|ipod/i.test(navigator.userAgent)&&!/crios|fxios/i.test(navigator.userAgent))b.hidden=false;
+b.onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;b.hidden=true}
+else alert('Para instalar en iPhone/iPad: toca Compartir y elige «Agregar a pantalla de inicio».\nEn otros navegadores: menú ⋮ → «Instalar app» o «Agregar a pantalla de inicio».')};})();
+if('serviceWorker'in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script></body></html>

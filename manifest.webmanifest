@@ -1,0 +1,16 @@
+{
+  "name": "Laminador STL → G-code (Ender-2 Pro)",
+  "short_name": "Laminador",
+  "description": "Convierte STL a G-code para Creality Ender-2 Pro, sin conexión.",
+  "lang": "es",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#E9ECEA",
+  "theme_color": "#D8352A",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
